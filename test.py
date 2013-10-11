@@ -14,7 +14,7 @@ tmp = []
 for i in range(1, 500):
     post = {"author": "Mike","text": "My first blog post!","tags": ["mongodb", "python", "pymongo"],"date": datetime.datetime.utcnow()}
     tmp.append(post)
-    posts.insert(tmp)
+posts.insert(tmp)
 print (time() - t)
 
 t = time()
