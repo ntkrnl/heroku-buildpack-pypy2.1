@@ -18,6 +18,11 @@ posts.insert(tmp)
 print (time() - t)
 
 t = time()
+post = {"author": "Mike","text": "My first blog post!","tags": ["mongodb", "python", "pymongo"],"date": datetime.datetime.utcnow()}
+posts.insert(post)
+print (time() - t)
+
+t = time()
 print db.collection_names()
 print time() - t
 
