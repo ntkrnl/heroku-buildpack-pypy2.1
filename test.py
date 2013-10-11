@@ -4,7 +4,7 @@ from pymongo.database import Database
 import datetime
 
 t = time()
-db = Connection('mongodb://test:123456@ds049858.mongolab.com:49858/heroku_app18586342')['heroku_app18586342']
+db = Connection('mongodb://test:123456@54.227.162.204:49858/heroku_app18586342')['heroku_app18586342']
 print time() - t
 collection = db.test
 
