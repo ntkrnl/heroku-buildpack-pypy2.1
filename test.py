@@ -39,4 +39,9 @@ t = time()
 s.connect((HOST, PORT))
 print time() - t
 
-
+import httplib
+t = time()
+conn = httplib.HTTPConnection("173.255.112.112", 80, False)
+conn.request('get', '/')
+print conn.getresponse().read()
+print time() - t
