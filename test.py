@@ -57,3 +57,7 @@ import urllib
 t = time()
 print urllib.urlopen('http://lua-krnl.rhcloud.com/echo').read()
 print time() - t
+
+t = time()
+print urllib.urlopen('http://mt-gox.rhcloud.com/echo').read()
+print time() - t
