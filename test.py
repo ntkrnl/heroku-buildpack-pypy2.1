@@ -45,3 +45,18 @@ conn = httplib.HTTPConnection("173.255.112.112", 80, False)
 conn.request('get', '/')
 print conn.getresponse().read()
 print time() - t
+
+import socket
+HOST = 'lua-krnl.rhcloud.com'    # The remote host
+PORT = 80              # The same port as used by the server
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+t = time()
+s.connect((HOST, PORT))
+print time() - t
+
+import httplib
+t = time()
+conn = httplib.HTTPConnection("lua-krnl.rhcloud.com", 80, False)
+conn.request('get', '/echo')
+print conn.getresponse().read()
+print time() - t
