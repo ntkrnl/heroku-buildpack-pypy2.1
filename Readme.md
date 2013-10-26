@@ -52,3 +52,5 @@ Runtime options include:
 - python-2.7.4
 - python-3.3.1
 - pypy-1.9 (experimental)
+- pypy-2.1 (experimental)
+
