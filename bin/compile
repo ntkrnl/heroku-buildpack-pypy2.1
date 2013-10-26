@@ -82,8 +82,8 @@ BUILD_DIR=$APP_DIR
 export PATH=$BUILD_DIR/.heroku/python/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export LIBRARY_PATH=/app/.heroku/vendor/lib
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib
+export LIBRARY_PATH=/app/.heroku/python/lib
+export LD_LIBRARY_PATH=/app/.heroku/python/lib
 
 # Switch to the repo's context.
 cd $BUILD_DIR
@@ -147,12 +147,19 @@ fi
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
     puts-step "Preparing Python runtime ($PYTHON_VERSION)"
-    curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
-    if [[ $? != 0 ]] ; then
-      puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
-      exit 1
+    if [ "$PYTHON_VERSION" == "pypy-2.1" ]; then
+        curl http://buildbot.pypy.org/nightly/trunk/pypy-c-jit-67522-d62e21894538-amd64-libc2.13.tar.bz2 -s | tar jx &> /dev/null
+        mv pypy-c-jit-67522-d62e21894538-amd64-libc2.13 python
+        mv $BIN_DIR/../lib python/lib
+    else
+        curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
+        if [[ $? != 0 ]] ; then
+            puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
+            puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+            exit 1
+        fi
     fi
+
     mv python .heroku/python
   bpwatch stop install_python
 
@@ -229,8 +236,14 @@ bpwatch stop collectstatic
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
-set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
-set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
+
+if [ "$PYTHON_VERSION" == "pypy-2.1" ]; then
+    set-default-env LD_LIBRARY_PATH /app/.heroku/python/lib
+    set-default-env LIBRARY_PATH /app/.heroku/python/lib
+    ln -s /app/.heroku/python/lib/libffi.so /app/.heroku/python/lib/libffi.so.5
+    ln -s /usr/lib64/libncurses.so /app/.heroku/python/lib/libtinfo.so.5
+fi
+
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
