@@ -153,6 +153,8 @@ if [ ! "$SKIP_INSTALL" ]; then
         mv $BIN_DIR/../lib python/lib
         mv python .heroku/python
 
+        ln -s /app/.heroku/python/lib/libffi.so /app/.heroku/python/lib/libffi.so.5
+        ln -s /usr/lib64/libncurses.so /app/.heroku/python/lib/libtinfo.so.5
         ln -s /app/.heroku/python/bin/pypy /app/.heroku/python/bin/python
     else
         curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
@@ -243,8 +245,6 @@ set-env PYTHONHOME /app/.heroku/python
 if [ "$PYTHON_VERSION" == "pypy-2.1" ]; then
     set-default-env LD_LIBRARY_PATH /app/.heroku/python/lib
     set-default-env LIBRARY_PATH /app/.heroku/python/lib
-    ln -s /app/.heroku/python/lib/libffi.so /app/.heroku/python/lib/libffi.so.5
-    ln -s /usr/lib64/libncurses.so /app/.heroku/python/lib/libtinfo.so.5
 fi
 
 set-default-env LANG en_US.UTF-8
