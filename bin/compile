@@ -151,9 +151,9 @@ if [ ! "$SKIP_INSTALL" ]; then
         curl http://buildbot.pypy.org/nightly/trunk/pypy-c-jit-67522-d62e21894538-amd64-libc2.13.tar.bz2 -s | tar jx &> /dev/null
         mv pypy-c-jit-67522-d62e21894538-amd64-libc2.13 python
         mv $BIN_DIR/../lib python/lib
-        cd python
-        ln -s ./pypy python
-        cd ..
+        mv python .heroku/python
+
+        ln -s /app/.heroku/python/bin/pypy /app/.heroku/python/bin/python 
     else
         curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
         if [[ $? != 0 ]] ; then
@@ -161,9 +161,9 @@ if [ ! "$SKIP_INSTALL" ]; then
             puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
             exit 1
         fi
+        mv python .heroku/python
     fi
 
-    mv python .heroku/python
   bpwatch stop install_python
 
   # Record for future reference.
