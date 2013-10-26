@@ -151,6 +151,9 @@ if [ ! "$SKIP_INSTALL" ]; then
         curl http://buildbot.pypy.org/nightly/trunk/pypy-c-jit-67522-d62e21894538-amd64-libc2.13.tar.bz2 -s | tar jx &> /dev/null
         mv pypy-c-jit-67522-d62e21894538-amd64-libc2.13 python
         mv $BIN_DIR/../lib python/lib
+        cd python
+        ln -s pypy python
+        cd ..
     else
         curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
         if [[ $? != 0 ]] ; then
